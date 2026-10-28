@@ -20,7 +20,7 @@ APP_VERSION = "1.0.0"
 
 # URL default tempat menaruh version.json (bisa diatur via config.json)
 # Contoh format: GitHub Raw, hosting pribadi, atau Google Drive direct download
-DEFAULT_UPDATE_CHECK_URL = "https://raw.githubusercontent.com/mfadh/AutoDriveReportManager/main/version.json"
+DEFAULT_UPDATE_CHECK_URL = "https://raw.githubusercontent.com/fadhilalfen/AutoDrivePPUK/main/version.json"
 
 
 def get_current_app_dir() -> str:
