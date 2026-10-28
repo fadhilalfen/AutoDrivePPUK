@@ -108,23 +108,23 @@ def add_watermark(image_path: str, kegiatan_name: str, rk_name: str = "") -> boo
                 x1, y1 = 4, 4
                 x2, y2 = min(width - 4, badge_width + 4), min(height - 4, badge_height + 4)
 
-            # Gambar badge latar belakang kapsul biru perpustakaan semi-transparan
-            # dengan garis tepi cyan elegan agar terbaca tajam di latar apapun
+            # Gambar badge latar belakang kapsul slate modern semi-transparan
+            # dengan garis tepi halus agar nyaman di mata dan terbaca tajam
             draw.rounded_rectangle(
                 [x1, y1, x2, y2],
                 radius=8,
-                fill=(11, 19, 43, 210),
-                outline=(56, 189, 248, 220),
+                fill=(24, 24, 27, 215),
+                outline=(82, 82, 91, 220),
                 width=1
             )
 
-            # Gambar teks putih & cyan
+            # Gambar teks putih & silver tenang
             text_x = x1 + 12
             text_y1 = y1 + 8
-            draw.text((text_x, text_y1), line1, fill=(255, 255, 255, 245), font=font_bold)
+            draw.text((text_x, text_y1), line1, fill=(250, 250, 250, 245), font=font_bold)
 
             text_y2 = text_y1 + h1 + 5
-            draw.text((text_x, text_y2), line2, fill=(144, 202, 249, 245), font=font_regular)
+            draw.text((text_x, text_y2), line2, fill=(212, 212, 216, 245), font=font_regular)
 
             # Gabungkan gambar asli dengan layer watermark
             final_img = Image.alpha_composite(img_rgba, watermark_layer)
