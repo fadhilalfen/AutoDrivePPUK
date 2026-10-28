@@ -173,6 +173,19 @@ class AutoDriveApp(ctk.CTk):
         )
         self.btn_update_badge.pack(side="left", padx=2, pady=6)
 
+        # Tombol Panduan Cepat di Top Bar (Selalu terlihat di mode Penuh & Ringkas)
+        self.btn_tutorial_quick = ctk.CTkButton(
+            self.top_bar,
+            text="💡 Panduan",
+            width=76,
+            height=24,
+            fg_color="#263238",
+            hover_color="#37474F",
+            font=ctk.CTkFont(size=10, weight="bold"),
+            command=self.show_tutorial_dialog
+        )
+        self.btn_tutorial_quick.pack(side="left", padx=3, pady=6)
+
         # Tombol Minimize ke Tray cepat
         self.btn_tray_quick = ctk.CTkButton(
             self.top_bar,
@@ -267,6 +280,18 @@ class AutoDriveApp(ctk.CTk):
             command=self.on_click_update_btn
         )
         self.btn_check_update.pack(side="right", padx=(0, 6))
+
+        self.btn_tutorial = ctk.CTkButton(
+            status_bar,
+            text="📖 Panduan Lengkap",
+            width=135,
+            height=26,
+            fg_color="#1f538d",
+            hover_color="#2b73be",
+            font=ctk.CTkFont(size=11, weight="bold"),
+            command=self.show_tutorial_dialog
+        )
+        self.btn_tutorial.pack(side="right", padx=(0, 6))
 
         # Sub-Frame Input Root Folder
         card_root = ctk.CTkFrame(self.frame_full_setup, corner_radius=10)
@@ -824,6 +849,316 @@ class AutoDriveApp(ctk.CTk):
         threading.Thread(target=_auth_worker, daemon=True).start()
 
     # ==========================
+    # PANDUAN PENDAMPINGAN (TUTORIAL STEP-BY-STEP)
+    # ==========================
+    def show_tutorial_dialog(self):
+        """Menampilkan dialog panduan interaktif step-by-step pendampingan penggunaan aplikasi."""
+        dialog = ctk.CTkToplevel(self)
+        dialog.title("📖 Panduan Pendampingan - AutoDrive Ekin PPUK")
+        dialog.geometry("640x590")
+        dialog.minsize(600, 560)
+        dialog.attributes("-topmost", True)
+        dialog.grab_set()
+
+        try:
+            x = self.winfo_x() + (self.winfo_width() // 2) - 320
+            y = self.winfo_y() + (self.winfo_height() // 2) - 295
+            dialog.geometry(f"+{max(0, x)}+{max(0, y)}")
+        except Exception:
+            pass
+
+        # Data Langkah Tutorial
+        steps_data = [
+            {
+                "badge": "Langkah 1 dari 6",
+                "title": "🔑 Persiapan & Login Akun Google Drive",
+                "tagline": "Hubungkan aplikasi ke akun Google Drive Anda sekali saja di awal.",
+                "bullets": [
+                    "• AutoDrive membutuhkan otorisasi akun Google Drive yang memiliki hak akses ke folder E-Kinerja tim Anda.",
+                    "• Klik tombol 'Login / Tes Drive' pada bilah status di atas (atau tombol biru di bawah).",
+                    "• Browser Anda akan terbuka otomatis. Pilih akun Google Anda lalu klik 'Izinkan / Allow'.",
+                    "• Setelah berhasil, indikator status akan berubah menjadi hijau: '● Drive: Terhubung'.",
+                    "• Anda hanya perlu login 1 kali; aplikasi mengingat sesi login Anda di masa mendatang."
+                ],
+                "tip": "💡 Tips: Pastikan email Google Anda sudah ditambahkan ke daftar izin akses folder E-Kinerja unit kerja.",
+                "action_text": "🔑 Uji / Login Akun Drive Sekarang",
+                "action_cmd": lambda: [dialog.destroy(), self.on_btn_auth_click()]
+            },
+            {
+                "badge": "Langkah 2 dari 6",
+                "title": "📁 Memilih Folder Sasaran E-Kinerja",
+                "tagline": "Tentukan folder tujuan akhir upload dengan 3 level dropdown bertingkat.",
+                "bullets": [
+                    "• Tempelkan tautan atau ID folder induk pada kolom '🏠 Link Root Folder (Home)'.",
+                    "• Klik '🔄 Muat Subfolder' untuk membaca seluruh susunan folder dari Google Drive.",
+                    "• Pilih secara bertingkat: 1) Rencana Kinerja ➔ 2) Bulan ➔ 3) Nama Kegiatan.",
+                    "• Nama Kegiatan yang Anda pilih merupakan folder sasaran akhir tempat file otomatis diunggah.",
+                    "• Folder belum ada di Drive? Klik tombol '➕ Buat Subfolder' untuk membuatnya langsung tanpa perlu membuka browser!"
+                ],
+                "tip": "💡 Tips: Folder yang Anda pilih otomatis disimpan. Besok saat aplikasi dibuka kembali, pilihan Anda tetap aktif.",
+                "action_text": "🏠 Muat Subfolder Root",
+                "action_cmd": lambda: [dialog.destroy(), self.load_root_structure_async()]
+            },
+            {
+                "badge": "Langkah 3 dari 6",
+                "title": "📸 Ambil Screenshot & Unduh Berkas Bukti",
+                "tagline": "Kerjakan tugas Anda dengan tenang, AutoDrive otomatis bekerja di latar belakang.",
+                "bullets": [
+                    "• Mengambil Tangkapan Layar: Tekan tombol keyboard 'Win + PrtScn' atau gunakan Snipping Tool ('Win + Shift + S').",
+                    "• Mengunduh Dokumen Laporan: Unduh berkas seperti Notula, Daftar Hadir, Surat Tugas dari WhatsApp Web atau browser ke folder Downloads.",
+                    "• AutoDrive langsung mendeteksi berkas baru dalam hitungan detik dan mengunggahnya ke folder kegiatan di Google Drive.",
+                    "• Setelah selesai diunggah, berkas lokal di laptop Anda otomatis dibersihkan agar penyimpanan laptop tidak penuh."
+                ],
+                "tip": "💡 Tips: Anda dapat memantau seluruh proses pengunggahan secara live pada kotak 'Riwayat Aktivitas & Log'.",
+                "action_text": "📂 Buka Folder Screenshot",
+                "action_cmd": lambda: self.open_screenshots_folder()
+            },
+            {
+                "badge": "Langkah 4 dari 6",
+                "title": "🏷️ Watermark Bukti & Auto-Rename Standar",
+                "tagline": "Otomatisasi cap tanggal, jam presisi, dan nama file yang terstandarisasi.",
+                "bullets": [
+                    "• 💧 Watermark Bukti Screenshot: Setiap tangkapan layar otomatis diberi cap resmi elegan di pojok kanan bawah berisi tanggal, jam WIB presisi, serta nama kegiatan dan rencana kinerja.",
+                    "• 🏷️ Format Nama File Otomatis: Mengubah nama acak seperti 'Screenshot (14).png' menjadi format resmi: YYYY-MM-DD_[Nama_Kegiatan]_[Waktu].png (contoh: '2026-10-28_Rapat_PK_134520.png').",
+                    "• Untuk dokumen PDF/Word/Excel: otomatis diberi prefiks tanggal dan nama kegiatan.",
+                    "• Anda bisa mengaktifkan/menonaktifkan fitur ini kapan saja melalui centang checkbox yang tersedia."
+                ],
+                "tip": "💡 Tips: Bukti tangkapan layar ber-watermark resmi ini sangat mempermudah verifikasi saat audit E-Kinerja BKN.",
+                "action_text": "📂 Buka Folder Downloads",
+                "action_cmd": lambda: self.open_downloads_folder()
+            },
+            {
+                "badge": "Langkah 5 dari 6",
+                "title": "🗗 Mode Ringkas Melayang & System Tray",
+                "tagline": "Jendela mini hemat ruang layar agar tidak menutupi dokumen kerja Anda.",
+                "bullets": [
+                    "• Klik tombol '🗗 Mode Ringkas' di pojok kanan atas untuk mengecilkan jendela menjadi widget mini (385 x 275 px).",
+                    "• Pada mode ringkas, hanya dropdown pemilihan kegiatan yang ditampilkan sehingga Anda bisa leluasa berganti target kegiatan tanpa memakan layar kerja Word/Excel.",
+                    "• Centang 'Melayang' agar jendela mini selalu berada di atas jendela lain.",
+                    "• Klik tombol 'Sembunyikan' atau tombol silang (X) untuk meminimalkan aplikasi ke System Tray (ikon bintang Perpusnas di taskbar kanan bawah dekat jam)."
+                ],
+                "tip": "💡 Tips: Untuk membuka kembali jendela dari System Tray, klik 2x atau klik kanan pada ikon bintang Perpusnas lalu pilih 'Tampilkan Jendela'.",
+                "action_text": "🗗 Coba Mode Ringkas Sekarang",
+                "action_cmd": lambda: [dialog.destroy(), self.toggle_view_mode()]
+            },
+            {
+                "badge": "Langkah 6 dari 6",
+                "title": "🔄 Cek Pembaruan Sistem (Auto-Updater)",
+                "tagline": "Kemudahan update aplikasi untuk rekan kerja hanya dengan 1 kali klik.",
+                "bullets": [
+                    "• Setiap kali aplikasi dibuka, sistem otomatis mengecek apakah ada versi perbaikan baru di GitHub repositori tim.",
+                    "• Jika ada pembaruan, lencana versi di pojok kiri atas otomatis berubah menjadi warna hijau: '🎉 Update!'.",
+                    "• Cukup klik tombol hijau tersebut untuk melihat catatan rilis (changelog), lalu klik '⬇️ Perbarui Sekarang'.",
+                    "• Aplikasi akan mengunduh paket update, memperbarui dirinya sendiri, dan membuka kembali secara otomatis.",
+                    "• Seluruh data akun Google dan pilihan folder Anda dijamin tetap tersimpan aman tanpa perlu setup ulang!"
+                ],
+                "tip": "💡 Tips: Anda juga bisa mengecek pembaruan secara manual kapan saja dengan mengklik tombol '🔄 Cek Update'.",
+                "action_text": "🔄 Cek Pembaruan Sekarang",
+                "action_cmd": lambda: [dialog.destroy(), self.on_click_update_btn()]
+            }
+        ]
+
+        # State Langkah Saat Ini (0 - 5)
+        current_step = [0]
+
+        # 1. Header Bar Dialog
+        header_bar = ctk.CTkFrame(dialog, corner_radius=10, fg_color=("#1f538d", "#14375e"))
+        header_bar.pack(fill="x", padx=16, pady=(16, 10))
+
+        lbl_top_title = ctk.CTkLabel(
+            header_bar,
+            text="🏛️ Panduan Pendampingan Penggunaan AutoDrive Ekin PPUK",
+            font=ctk.CTkFont(size=14, weight="bold"),
+            text_color="#ffffff"
+        )
+        lbl_top_title.pack(anchor="w", padx=14, pady=(10, 2))
+
+        lbl_top_sub = ctk.CTkLabel(
+            header_bar,
+            text="Ikuti langkah-langkah mudah di bawah ini untuk memulai otomatisasi bukti kerja ke Google Drive.",
+            font=ctk.CTkFont(size=11),
+            text_color="#cfd8dc"
+        )
+        lbl_top_sub.pack(anchor="w", padx=14, pady=(0, 10))
+
+        # 2. Step Selector Pills (1 s.d. 6)
+        pill_frame = ctk.CTkFrame(dialog, fg_color="transparent")
+        pill_frame.pack(fill="x", padx=16, pady=(0, 8))
+
+        step_buttons: List[ctk.CTkButton] = []
+        short_labels = ["1. Akun", "2. Folder", "3. Upload", "4. Cap/Nama", "5. Mini Mode", "6. Update"]
+
+        # 3. Card Konten Langkah
+        card_content = ctk.CTkFrame(dialog, corner_radius=10)
+        card_content.pack(fill="both", expand=True, padx=16, pady=(0, 10))
+
+        lbl_step_badge = ctk.CTkLabel(
+            card_content,
+            text="",
+            font=ctk.CTkFont(size=11, weight="bold"),
+            fg_color="#1f538d",
+            corner_radius=6,
+            padx=10,
+            pady=3
+        )
+        lbl_step_badge.pack(anchor="w", padx=16, pady=(14, 4))
+
+        lbl_step_title = ctk.CTkLabel(
+            card_content,
+            text="",
+            font=ctk.CTkFont(size=15, weight="bold"),
+            anchor="w"
+        )
+        lbl_step_title.pack(fill="x", padx=16, pady=(2, 2))
+
+        lbl_step_tagline = ctk.CTkLabel(
+            card_content,
+            text="",
+            font=ctk.CTkFont(size=12, slant="italic"),
+            text_color="#90a4ae",
+            anchor="w"
+        )
+        lbl_step_tagline.pack(fill="x", padx=16, pady=(0, 10))
+
+        txt_step_bullets = ctk.CTkTextbox(
+            card_content,
+            height=140,
+            font=ctk.CTkFont(size=11),
+            corner_radius=6
+        )
+        txt_step_bullets.pack(fill="both", expand=True, padx=16, pady=(0, 8))
+
+        # Box Tips
+        frame_tip = ctk.CTkFrame(card_content, corner_radius=8, fg_color=("#1e293b", "#0f172a"))
+        frame_tip.pack(fill="x", padx=16, pady=(0, 12))
+
+        lbl_tip = ctk.CTkLabel(
+            frame_tip,
+            text="",
+            font=ctk.CTkFont(size=11),
+            text_color="#81c784",
+            wraplength=560,
+            justify="left"
+        )
+        lbl_tip.pack(fill="x", padx=12, pady=8)
+
+        # Action Button Per Langkah
+        btn_action = ctk.CTkButton(
+            card_content,
+            text="",
+            height=32,
+            font=ctk.CTkFont(size=11, weight="bold")
+        )
+        btn_action.pack(anchor="w", padx=16, pady=(0, 14))
+
+        # 4. Bottom Navigation Bar
+        nav_bar = ctk.CTkFrame(dialog, fg_color="transparent")
+        nav_bar.pack(fill="x", padx=16, pady=(0, 16))
+
+        btn_prev = ctk.CTkButton(
+            nav_bar,
+            text="⬅️ Sebelumnya",
+            width=110,
+            height=34,
+            fg_color="#37474F",
+            hover_color="#455A64",
+            font=ctk.CTkFont(size=11)
+        )
+        btn_prev.pack(side="left")
+
+        lbl_counter = ctk.CTkLabel(
+            nav_bar,
+            text="",
+            font=ctk.CTkFont(size=11, weight="bold"),
+            text_color="#90a4ae"
+        )
+        lbl_counter.pack(side="left", expand=True)
+
+        btn_next = ctk.CTkButton(
+            nav_bar,
+            text="Selanjutnya ➡️",
+            width=130,
+            height=34,
+            fg_color="#1f538d",
+            hover_color="#2b73be",
+            font=ctk.CTkFont(size=11, weight="bold")
+        )
+        btn_next.pack(side="right")
+
+        def _render_step(idx: int):
+            current_step[0] = idx
+            data = steps_data[idx]
+
+            # Update Header & Info
+            lbl_step_badge.configure(text=data["badge"])
+            lbl_step_title.configure(text=data["title"])
+            lbl_step_tagline.configure(text=data["tagline"])
+
+            # Update Bullets
+            txt_step_bullets.configure(state="normal")
+            txt_step_bullets.delete("1.0", "end")
+            txt_step_bullets.insert("1.0", "\n\n".join(data["bullets"]))
+            txt_step_bullets.configure(state="disabled")
+
+            # Update Tips & Action
+            lbl_tip.configure(text=data["tip"])
+            btn_action.configure(text=data["action_text"], command=data["action_cmd"])
+
+            # Update Pills
+            for i, btn in enumerate(step_buttons):
+                if i == idx:
+                    btn.configure(fg_color="#1f538d", text_color="#ffffff")
+                else:
+                    btn.configure(fg_color="#263238", text_color="#90a4ae")
+
+            # Update Counter & Nav Buttons
+            lbl_counter.configure(text=f"Langkah {idx + 1} dari {len(steps_data)}")
+            if idx == 0:
+                btn_prev.configure(state="disabled")
+            else:
+                btn_prev.configure(state="normal")
+
+            if idx == len(steps_data) - 1:
+                btn_next.configure(
+                    text="✅ Selesai & Tutup",
+                    fg_color="#2e7d32",
+                    hover_color="#388e3c",
+                    command=dialog.destroy
+                )
+            else:
+                btn_next.configure(
+                    text="Selanjutnya ➡️",
+                    fg_color="#1f538d",
+                    hover_color="#2b73be",
+                    command=_next_step
+                )
+
+        def _prev_step():
+            if current_step[0] > 0:
+                _render_step(current_step[0] - 1)
+
+        def _next_step():
+            if current_step[0] < len(steps_data) - 1:
+                _render_step(current_step[0] + 1)
+
+        btn_prev.configure(command=_prev_step)
+
+        # Build Step Pills
+        for i, s_lbl in enumerate(short_labels):
+            s_btn = ctk.CTkButton(
+                pill_frame,
+                text=s_lbl,
+                height=26,
+                font=ctk.CTkFont(size=10, weight="bold"),
+                command=lambda step_idx=i: _render_step(step_idx)
+            )
+            s_btn.pack(side="left", fill="x", expand=True, padx=2)
+            step_buttons.append(s_btn)
+
+        # Tampilkan Langkah Pertama
+        _render_step(0)
+
+    # ==========================
     # AUTO-UPDATER (Cek & Pasang Pembaruan)
     # ==========================
     def check_updates_background(self):
@@ -1295,6 +1630,7 @@ class AutoDriveApp(ctk.CTk):
         target_info = h.get("kegiatan_name") or "Standby / Belum Ditentukan"
         return pystray.Menu(
             pystray.MenuItem("Tampilkan Jendela", self.show_from_tray, default=True),
+            pystray.MenuItem("📖 Panduan Aplikasi", lambda: self.after(0, self.show_tutorial_dialog)),
             pystray.MenuItem(f"Kegiatan: {target_info}", lambda: None, enabled=False),
             pystray.Menu.SEPARATOR,
             pystray.MenuItem("Keluar", self.quit_application)
