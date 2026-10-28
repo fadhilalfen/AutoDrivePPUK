@@ -79,9 +79,9 @@ def add_watermark(image_path: str, kegiatan_name: str, rk_name: str = "") -> boo
                     font_bold = ImageFont.load_default()
                     font_regular = ImageFont.load_default()
 
-            # Susun teks watermark
+            # Susun teks watermark berstempel resmi Perpusnas
             now_str = datetime.now().strftime("%d %b %Y, %H:%M:%S")
-            line1 = f"📅 {now_str} WIB"
+            line1 = f"🏛️ PERPUSNAS RI • {now_str} WIB"
             line2 = f"🎯 {kegiatan_name[:45]}"
             if rk_name and len(kegiatan_name) < 25:
                 line2 += f" | {rk_name[:20]}"
@@ -108,13 +108,13 @@ def add_watermark(image_path: str, kegiatan_name: str, rk_name: str = "") -> boo
                 x1, y1 = 4, 4
                 x2, y2 = min(width - 4, badge_width + 4), min(height - 4, badge_height + 4)
 
-            # Gambar badge latar belakang kapsul gelap semi-transparan (Alpha = 175)
-            # dengan garis tepi tipis agar terbaca di latar apapun (gelap/terang)
+            # Gambar badge latar belakang kapsul biru perpustakaan semi-transparan
+            # dengan garis tepi cyan elegan agar terbaca tajam di latar apapun
             draw.rounded_rectangle(
                 [x1, y1, x2, y2],
                 radius=8,
-                fill=(18, 18, 18, 185),
-                outline=(100, 181, 246, 200),
+                fill=(11, 19, 43, 210),
+                outline=(56, 189, 248, 220),
                 width=1
             )
 

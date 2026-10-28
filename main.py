@@ -82,6 +82,7 @@ class AutoDriveApp(ctk.CTk):
 
         # Konfigurasi Awal Jendela & Ikon Perpusnas
         self.title("AutoDrive Ekin PPUK")
+        self.configure(fg_color="#0A111E")
 
         ico_path = get_asset_path("app_icon.ico")
         png_path = get_asset_path("logo_star.png")
@@ -132,9 +133,16 @@ class AutoDriveApp(ctk.CTk):
 
     def _build_ui(self):
         # -------------------------------------------------------------
-        # 1. TOP BAR KOMPAK (Selalu terlihat di mode Penuh & Ringkas)
         # -------------------------------------------------------------
-        self.top_bar = ctk.CTkFrame(self, corner_radius=10, fg_color=("#242424", "#181818"))
+        # 1. TOP BAR INSTITUSI (PERPUSNAS THEMED BANNER)
+        # -------------------------------------------------------------
+        self.top_bar = ctk.CTkFrame(
+            self,
+            corner_radius=12,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         self.top_bar.pack(fill="x", padx=12, pady=(10, 4))
 
         # Brand & Logo Perpusnas di Top Bar
@@ -144,7 +152,7 @@ class AutoDriveApp(ctk.CTk):
                 self.brand_logo_img = ctk.CTkImage(
                     light_image=Image.open(logo_png),
                     dark_image=Image.open(logo_png),
-                    size=(22, 22)
+                    size=(24, 24)
                 )
             except Exception:
                 self.brand_logo_img = None
@@ -156,9 +164,10 @@ class AutoDriveApp(ctk.CTk):
             text=" AutoDrive Ekin PPUK",
             image=self.brand_logo_img,
             compound="left",
-            font=ctk.CTkFont(size=13, weight="bold")
+            font=ctk.CTkFont(size=13, weight="bold"),
+            text_color="#F8FAFC"
         )
-        self.lbl_app_brand.pack(side="left", padx=(10, 4), pady=6)
+        self.lbl_app_brand.pack(side="left", padx=(10, 4), pady=7)
 
         # Lencana Versi & Tombol Cek Pembaruan di Top Bar
         self.btn_update_badge = ctk.CTkButton(
@@ -166,8 +175,11 @@ class AutoDriveApp(ctk.CTk):
             text=f"v{APP_VERSION}",
             width=58,
             height=24,
-            fg_color="#37474F",
-            hover_color="#455A64",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
+            text_color="#E2E8F0",
             font=ctk.CTkFont(size=10, weight="bold"),
             command=self.on_click_update_btn
         )
@@ -177,10 +189,11 @@ class AutoDriveApp(ctk.CTk):
         self.btn_tutorial_quick = ctk.CTkButton(
             self.top_bar,
             text="💡 Panduan",
-            width=76,
+            width=78,
             height=24,
-            fg_color="#263238",
-            hover_color="#37474F",
+            fg_color="#0F4C81",
+            hover_color="#1A56DB",
+            text_color="#F0FDF4",
             font=ctk.CTkFont(size=10, weight="bold"),
             command=self.show_tutorial_dialog
         )
@@ -192,8 +205,11 @@ class AutoDriveApp(ctk.CTk):
             text="Sembunyikan",
             width=85,
             height=26,
-            fg_color="#37474F",
-            hover_color="#455A64",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
+            text_color="#CBD5E1",
             font=ctk.CTkFont(size=11),
             command=self.hide_to_tray
         )
@@ -205,8 +221,8 @@ class AutoDriveApp(ctk.CTk):
             text="🗗 Mode Ringkas",
             width=115,
             height=26,
-            fg_color="#1f538d",
-            hover_color="#2b73be",
+            fg_color="#1D4ED8",
+            hover_color="#2563EB",
             font=ctk.CTkFont(size=11, weight="bold"),
             command=self.toggle_view_mode
         )
@@ -218,6 +234,8 @@ class AutoDriveApp(ctk.CTk):
             text="Melayang",
             font=ctk.CTkFont(size=11),
             width=65,
+            fg_color="#0284C7",
+            hover_color="#0369A1",
             command=self.toggle_always_on_top
         )
         if self.config_mgr.get_always_on_top():
@@ -240,7 +258,8 @@ class AutoDriveApp(ctk.CTk):
             status_bar,
             text="Memeriksa Drive...",
             font=ctk.CTkFont(size=11, weight="bold"),
-            fg_color="#333333",
+            fg_color="#1E293B",
+            text_color="#94A3B8",
             corner_radius=6,
             padx=10,
             pady=3
@@ -249,10 +268,10 @@ class AutoDriveApp(ctk.CTk):
 
         self.watcher_badge = ctk.CTkLabel(
             status_bar,
-            text="● Watcher Aktif",
+            text="● Watcher: Siaga",
             font=ctk.CTkFont(size=11, weight="bold"),
-            fg_color="#1d5c27",
-            text_color="#85e396",
+            fg_color="#082F49",
+            text_color="#38BDF8",
             corner_radius=6,
             padx=10,
             pady=3
@@ -261,10 +280,12 @@ class AutoDriveApp(ctk.CTk):
 
         self.btn_auth = ctk.CTkButton(
             status_bar,
-            text="Login / Tes Drive",
-            width=120,
+            text="🔑 Login Drive",
+            width=115,
             height=26,
-            font=ctk.CTkFont(size=11),
+            fg_color="#1E3A8A",
+            hover_color="#2563EB",
+            font=ctk.CTkFont(size=11, weight="bold"),
             command=self.on_btn_auth_click
         )
         self.btn_auth.pack(side="right")
@@ -274,8 +295,10 @@ class AutoDriveApp(ctk.CTk):
             text="🔄 Cek Update",
             width=90,
             height=26,
-            fg_color="#37474F",
-            hover_color="#455A64",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             font=ctk.CTkFont(size=11),
             command=self.on_click_update_btn
         )
@@ -286,32 +309,46 @@ class AutoDriveApp(ctk.CTk):
             text="📖 Panduan Lengkap",
             width=135,
             height=26,
-            fg_color="#1f538d",
-            hover_color="#2b73be",
+            fg_color="#0F766E",
+            hover_color="#0D9488",
             font=ctk.CTkFont(size=11, weight="bold"),
             command=self.show_tutorial_dialog
         )
         self.btn_tutorial.pack(side="right", padx=(0, 6))
 
         # Sub-Frame Input Root Folder
-        card_root = ctk.CTkFrame(self.frame_full_setup, corner_radius=10)
+        card_root = ctk.CTkFrame(
+            self.frame_full_setup,
+            corner_radius=12,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         card_root.pack(fill="x", padx=12, pady=4)
 
         row_root_top = ctk.CTkFrame(card_root, fg_color="transparent")
         row_root_top.pack(fill="x", padx=12, pady=(8, 2))
 
-        lbl_root = ctk.CTkLabel(row_root_top, text="🏠 Link Root Folder (Home):", font=ctk.CTkFont(weight="bold", size=12))
+        lbl_root = ctk.CTkLabel(
+            row_root_top,
+            text="🏛️ Direktori Induk Arsip Digital (Root Folder):",
+            font=ctk.CTkFont(weight="bold", size=12),
+            text_color="#F1F5F9"
+        )
         lbl_root.pack(side="left")
 
         self.seg_mode = ctk.CTkSegmentedButton(
             row_root_top,
-            values=["Auto-Upload ke Drive", "Standby (Lokal)"],
+            values=["☁️ Auto-Upload ke Drive", "📁 Standby (Lokal)"],
             height=26,
             font=ctk.CTkFont(size=11),
+            selected_color="#1D4ED8",
+            selected_hover_color="#2563EB",
+            unselected_color="#1E293B",
             command=self.on_mode_changed
         )
         current_mode = self.config_mgr.get_mode()
-        self.seg_mode.set("Auto-Upload ke Drive" if current_mode == "Drive" else "Standby (Lokal)")
+        self.seg_mode.set("☁️ Auto-Upload ke Drive" if current_mode == "Drive" else "📁 Standby (Lokal)")
         self.seg_mode.pack(side="right")
 
         row_root_input = ctk.CTkFrame(card_root, fg_color="transparent")
@@ -319,38 +356,60 @@ class AutoDriveApp(ctk.CTk):
 
         self.entry_root_url = ctk.CTkEntry(
             row_root_input,
-            placeholder_text="Tempel URL atau ID Root Folder Google Drive...",
+            placeholder_text="Tempel URL atau ID Root Folder Google Drive E-Kinerja...",
             height=32,
-            font=ctk.CTkFont(size=11)
+            font=ctk.CTkFont(size=11),
+            border_color="#1E40AF"
         )
         self.entry_root_url.insert(0, self.config_mgr.get_root_folder_url())
         self.entry_root_url.pack(side="left", fill="x", expand=True, padx=(0, 6))
 
         self.btn_load_root = ctk.CTkButton(
             row_root_input,
-            text="🔄 Muat Subfolder",
+            text="🔄 Muat Katalog",
             width=120,
             height=32,
             font=ctk.CTkFont(size=11, weight="bold"),
+            fg_color="#1D4ED8",
+            hover_color="#2563EB",
             command=self.load_root_structure_async
         )
         self.btn_load_root.pack(side="right")
 
         # -------------------------------------------------------------
-        # 3. KARTU DROPDOWN BERTINGKAT (UTAMA - Tampil di Keduanya)
+        # 3. KARTU KATALOG BERTINGKAT (UTAMA - Tampil di Keduanya)
         # -------------------------------------------------------------
-        self.card_cascade = ctk.CTkFrame(self, corner_radius=10)
+        self.card_cascade = ctk.CTkFrame(
+            self,
+            corner_radius=12,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         self.card_cascade.pack(fill="x", padx=12, pady=4)
+
+        # Header Kartu Katalog
+        row_cat_head = ctk.CTkFrame(self.card_cascade, fg_color="transparent")
+        row_cat_head.pack(fill="x", padx=12, pady=(8, 2))
+        ctk.CTkLabel(
+            row_cat_head,
+            text="📚 Katalog Bertingkat Bukti Kinerja:",
+            font=ctk.CTkFont(size=12, weight="bold"),
+            text_color="#F8FAFC"
+        ).pack(side="left")
 
         # Level 1: Rencana Kinerja
         row_rk = ctk.CTkFrame(self.card_cascade, fg_color="transparent")
-        row_rk.pack(fill="x", padx=12, pady=(8, 3))
-        ctk.CTkLabel(row_rk, text="1. Rencana Kinerja:", width=125, anchor="w", font=ctk.CTkFont(size=11, weight="bold")).pack(side="left")
+        row_rk.pack(fill="x", padx=12, pady=(4, 3))
+        ctk.CTkLabel(row_rk, text="1. 📑 Rencana Kinerja:", width=130, anchor="w", font=ctk.CTkFont(size=11, weight="bold"), text_color="#CBD5E1").pack(side="left")
         self.combo_rk = ctk.CTkComboBox(
             row_rk,
             values=["-- Muat Root URL dahulu --"],
             height=28,
             font=ctk.CTkFont(size=11),
+            button_color="#1E3A8A",
+            border_color="#2A3B53",
+            corner_radius=8,
             command=self.on_rk_selected
         )
         self.combo_rk.pack(side="right", fill="x", expand=True)
@@ -358,12 +417,15 @@ class AutoDriveApp(ctk.CTk):
         # Level 2: Bulan
         row_bulan = ctk.CTkFrame(self.card_cascade, fg_color="transparent")
         row_bulan.pack(fill="x", padx=12, pady=3)
-        ctk.CTkLabel(row_bulan, text="2. Bulan:", width=125, anchor="w", font=ctk.CTkFont(size=11, weight="bold")).pack(side="left")
+        ctk.CTkLabel(row_bulan, text="2. 📅 Periode / Bulan:", width=130, anchor="w", font=ctk.CTkFont(size=11, weight="bold"), text_color="#CBD5E1").pack(side="left")
         self.combo_bulan = ctk.CTkComboBox(
             row_bulan,
             values=["-- Pilih Rencana Kinerja --"],
             height=28,
             font=ctk.CTkFont(size=11),
+            button_color="#1E3A8A",
+            border_color="#2A3B53",
+            corner_radius=8,
             command=self.on_bulan_selected
         )
         self.combo_bulan.pack(side="right", fill="x", expand=True)
@@ -371,40 +433,49 @@ class AutoDriveApp(ctk.CTk):
         # Level 3: Nama Kegiatan (Target Upload Akhir)
         row_kegiatan = ctk.CTkFrame(self.card_cascade, fg_color="transparent")
         row_kegiatan.pack(fill="x", padx=12, pady=3)
-        ctk.CTkLabel(row_kegiatan, text="3. Nama Kegiatan:", width=125, anchor="w", font=ctk.CTkFont(size=11, weight="bold")).pack(side="left")
+        ctk.CTkLabel(row_kegiatan, text="3. 🎯 Nama Kegiatan:", width=130, anchor="w", font=ctk.CTkFont(size=11, weight="bold"), text_color="#CBD5E1").pack(side="left")
         self.combo_kegiatan = ctk.CTkComboBox(
             row_kegiatan,
             values=["-- Pilih Bulan dahulu --"],
             height=28,
             font=ctk.CTkFont(size=11),
+            button_color="#1E3A8A",
+            border_color="#2A3B53",
+            corner_radius=8,
             command=self.on_kegiatan_selected
         )
         self.combo_kegiatan.pack(side="right", fill="x", expand=True)
 
-        # Info Sasaran & Tombol Buat Folder Baru
-        row_target_info = ctk.CTkFrame(self.card_cascade, fg_color="transparent")
-        row_target_info.pack(fill="x", padx=12, pady=(4, 8))
+        # Highlight Box Sasaran Aktif & Tombol Buat Sub-Berkas
+        frame_target_box = ctk.CTkFrame(
+            self.card_cascade,
+            fg_color="#07101E",
+            corner_radius=8,
+            border_width=1,
+            border_color="#1E40AF"
+        )
+        frame_target_box.pack(fill="x", padx=12, pady=(6, 8))
 
         self.lbl_active_target = ctk.CTkLabel(
-            row_target_info,
-            text="🎯 Sasaran: Belum Lengkap",
+            frame_target_box,
+            text="📍 Sasaran Unggah: [Belum Lengkap]",
             font=ctk.CTkFont(size=11, weight="bold"),
-            text_color="#FFA726",
+            text_color="#FBBF24",
             anchor="w"
         )
-        self.lbl_active_target.pack(side="left", fill="x", expand=True)
+        self.lbl_active_target.pack(side="left", fill="x", expand=True, padx=10, pady=4)
 
         self.btn_new_folder = ctk.CTkButton(
-            row_target_info,
-            text="+ Buat Subfolder",
-            width=105,
+            frame_target_box,
+            text="➕ Buat Sub-Berkas",
+            width=115,
             height=24,
-            fg_color="#37474F",
-            hover_color="#455A64",
-            font=ctk.CTkFont(size=10),
+            fg_color="#1E3A8A",
+            hover_color="#2563EB",
+            font=ctk.CTkFont(size=10, weight="bold"),
             command=self.prompt_create_folder
         )
-        self.btn_new_folder.pack(side="right")
+        self.btn_new_folder.pack(side="right", padx=6, pady=4)
 
         # Baris Opsi Watermark & Auto-Rename
         row_extra_features = ctk.CTkFrame(self.card_cascade, fg_color="transparent")
@@ -412,8 +483,10 @@ class AutoDriveApp(ctk.CTk):
 
         self.chk_watermark = ctk.CTkCheckBox(
             row_extra_features,
-            text="💧 Watermark Bukti",
+            text="💧 Cap Stempel Bukti (Waktu & Kegiatan)",
             font=ctk.CTkFont(size=11),
+            fg_color="#0284C7",
+            hover_color="#0369A1",
             command=self.toggle_watermark
         )
         if self.config_mgr.get_enable_watermark():
@@ -424,8 +497,10 @@ class AutoDriveApp(ctk.CTk):
 
         self.chk_auto_rename = ctk.CTkCheckBox(
             row_extra_features,
-            text="🏷️ Auto-Rename Kegiatan",
+            text="🏷️ Standarisasi Nama Arsip (Auto-Rename)",
             font=ctk.CTkFont(size=11),
+            fg_color="#0284C7",
+            hover_color="#0369A1",
             command=self.toggle_auto_rename
         )
         if self.config_mgr.get_enable_auto_rename():
@@ -437,51 +512,76 @@ class AutoDriveApp(ctk.CTk):
         # -------------------------------------------------------------
         # 4. FRAME LOG AKTIVITAS (Disembunyikan saat Mode Ringkas)
         # -------------------------------------------------------------
-        self.frame_log = ctk.CTkFrame(self, corner_radius=10)
+        self.frame_log = ctk.CTkFrame(
+            self,
+            corner_radius=12,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         # Akan di-pack saat mode penuh
 
         row_log_head = ctk.CTkFrame(self.frame_log, fg_color="transparent")
         row_log_head.pack(fill="x", padx=12, pady=(6, 2))
 
-        lbl_log = ctk.CTkLabel(row_log_head, text="Aktivitas Pemantauan:", font=ctk.CTkFont(weight="bold", size=11))
+        lbl_log = ctk.CTkLabel(
+            row_log_head,
+            text="📜 Log Sirkulasi & Preservasi Berkas (Live Monitoring):",
+            font=ctk.CTkFont(weight="bold", size=11),
+            text_color="#F8FAFC"
+        )
         lbl_log.pack(side="left")
 
         btn_clear = ctk.CTkButton(
             row_log_head,
-            text="Bersihkan Log",
-            width=85,
+            text="🧹 Bersihkan Log",
+            width=95,
             height=22,
             font=ctk.CTkFont(size=10),
-            fg_color="#424242",
-            hover_color="#616161",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             command=self.clear_log
         )
         btn_clear.pack(side="right")
 
-        self.txt_log = ctk.CTkTextbox(self.frame_log, font=ctk.CTkFont(family="Consolas", size=10), wrap="word")
+        self.txt_log = ctk.CTkTextbox(
+            self.frame_log,
+            font=ctk.CTkFont(family="Consolas", size=10),
+            wrap="word",
+            fg_color="#060B14",
+            border_width=1,
+            border_color="#1E293B",
+            corner_radius=8
+        )
         self.txt_log.pack(fill="both", expand=True, padx=12, pady=(2, 6))
 
         row_quick_btn = ctk.CTkFrame(self.frame_log, fg_color="transparent")
-        row_quick_btn.pack(fill="x", padx=12, pady=(0, 6))
+        row_quick_btn.pack(fill="x", padx=12, pady=(0, 8))
 
         btn_dl = ctk.CTkButton(
             row_quick_btn,
-            text="📁 Folder Downloads",
-            height=24,
-            font=ctk.CTkFont(size=10),
-            fg_color="#263238",
-            hover_color="#37474F",
+            text="📥 Buka Folder Unduhan",
+            height=26,
+            font=ctk.CTkFont(size=10, weight="bold"),
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             command=self.open_downloads_folder
         )
         btn_dl.pack(side="left", fill="x", expand=True, padx=(0, 4))
 
         btn_ss = ctk.CTkButton(
             row_quick_btn,
-            text="📸 Folder Screenshots",
-            height=24,
-            font=ctk.CTkFont(size=10),
-            fg_color="#263238",
-            hover_color="#37474F",
+            text="📸 Buka Folder Tangkapan Layar",
+            height=26,
+            font=ctk.CTkFont(size=10, weight="bold"),
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             command=self.open_screenshots_folder
         )
         btn_ss.pack(side="right", fill="x", expand=True, padx=(4, 0))
@@ -508,9 +608,13 @@ class AutoDriveApp(ctk.CTk):
             self.card_cascade.pack(fill="x", padx=12, pady=4)
 
             # Perkecil ukuran jendela menjadi widget mini
-            self.minsize(370, 260)
-            self.geometry("385x275")
-            self.btn_toggle_mode.configure(text="⛶ Mode Penuh", fg_color="#2E7D32", hover_color="#388E3C")
+            self.minsize(380, 270)
+            self.geometry("395x285")
+            self.btn_toggle_mode.configure(
+                text="⛶ Mode Penuh",
+                fg_color="#0F766E",
+                hover_color="#0D9488"
+            )
             self.lbl_app_brand.configure(text=" AutoDrive Ekin [Mini]")
         else:
             # Tampilkan semua komponen
@@ -522,7 +626,11 @@ class AutoDriveApp(ctk.CTk):
             # Kembalikan ke ukuran standar
             self.minsize(580, 700)
             self.geometry("640x760")
-            self.btn_toggle_mode.configure(text="🗗 Mode Ringkas", fg_color="#1f538d", hover_color="#2b73be")
+            self.btn_toggle_mode.configure(
+                text="🗗 Mode Ringkas",
+                fg_color="#1D4ED8",
+                hover_color="#2563EB"
+            )
             self.lbl_app_brand.configure(text=" AutoDrive Ekin PPUK")
 
     def toggle_watermark(self):
@@ -541,7 +649,7 @@ class AutoDriveApp(ctk.CTk):
     # LOGIKA POHON FOLDER GOOGLE DRIVE (ASYNC)
     # ==========================================
     def on_mode_changed(self, value: str):
-        if value == "Auto-Upload ke Drive":
+        if "Drive" in value or "Auto-Upload" in value:
             self.config_mgr.set_mode("Drive")
             self.enqueue_log("Mode: Auto-Upload ke Google Drive.", "INFO")
         else:
@@ -713,17 +821,17 @@ class AutoDriveApp(ctk.CTk):
         mode = self.config_mgr.get_mode()
         if mode == "Default":
             self.lbl_active_target.configure(
-                text="🎯 Sasaran: Standby Lokal (Tidak Unggah)",
-                text_color="#81C784"
+                text="📍 Status: Standby Lokal (Berkas disimpan di laptop)",
+                text_color="#34D399"
             )
             return
 
         h = self.config_mgr.get_hierarchy()
         if h.get("kegiatan_id"):
-            display_str = f"🎯 Sasaran: {h.get('kegiatan_name')}"
-            self.lbl_active_target.configure(text=display_str, text_color="#64B5F6")
+            display_str = f"📍 Katalog Sasaran: {h.get('kegiatan_name')}"
+            self.lbl_active_target.configure(text=display_str, text_color="#38BDF8")
         else:
-            self.lbl_active_target.configure(text="🎯 Sasaran: Belum Lengkap", text_color="#FFA726")
+            self.lbl_active_target.configure(text="📍 Katalog Sasaran: [Belum Dipilih]", text_color="#FBBF24")
 
     # ==========================================
     # BUAT SUBFOLDER BARU ON-THE-FLY
@@ -797,8 +905,15 @@ class AutoDriveApp(ctk.CTk):
         while not self.log_queue.empty():
             try:
                 msg, level, timestamp = self.log_queue.get_nowait()
-                tag = f"[{timestamp}] [{level}] "
-                full_text = f"{tag}{msg}\n"
+                level_tags = {
+                    "INFO": "📘 [INFO]",
+                    "SUCCESS": "📗 [SUKSES]",
+                    "WARNING": "📙 [PERINGATAN]",
+                    "ERROR": "📕 [GAGAL]",
+                    "UPLOAD": "📤 [UNGGAH]"
+                }
+                lvl_str = level_tags.get(level.upper(), f"[{level}]")
+                full_text = f"[{timestamp}] {lvl_str} {msg}\n"
                 self.txt_log.insert("end", full_text)
                 self.txt_log.see("end")
             except queue.Empty:
@@ -816,21 +931,21 @@ class AutoDriveApp(ctk.CTk):
         if is_ready:
             self.auth_badge.configure(
                 text="● Drive: Terhubung",
-                fg_color="#1d5c27",
-                text_color="#85e396"
+                fg_color="#064E3B",
+                text_color="#6EE7B7"
             )
         else:
             if not os.path.exists(self.drive_mgr.credentials_path):
                 self.auth_badge.configure(
                     text="⚠ credentials.json Belum Ada",
-                    fg_color="#8a4b08",
-                    text_color="#fcd34d"
+                    fg_color="#451A03",
+                    text_color="#FDE68A"
                 )
             else:
                 self.auth_badge.configure(
                     text="● Perlu Login Pertama",
-                    fg_color="#5c441d",
-                    text_color="#fcd34d"
+                    fg_color="#3B2508",
+                    text_color="#FDE68A"
                 )
 
     def on_btn_auth_click(self):
@@ -859,6 +974,7 @@ class AutoDriveApp(ctk.CTk):
         dialog.minsize(600, 560)
         dialog.attributes("-topmost", True)
         dialog.grab_set()
+        dialog.configure(fg_color="#0A111E")
 
         try:
             x = self.winfo_x() + (self.winfo_width() // 2) - 320
@@ -962,14 +1078,20 @@ class AutoDriveApp(ctk.CTk):
         current_step = [0]
 
         # 1. Header Bar Dialog
-        header_bar = ctk.CTkFrame(dialog, corner_radius=10, fg_color=("#1f538d", "#14375e"))
+        header_bar = ctk.CTkFrame(
+            dialog,
+            corner_radius=10,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         header_bar.pack(fill="x", padx=16, pady=(16, 10))
 
         lbl_top_title = ctk.CTkLabel(
             header_bar,
             text="🏛️ Panduan Pendampingan Penggunaan AutoDrive Ekin PPUK",
             font=ctk.CTkFont(size=14, weight="bold"),
-            text_color="#ffffff"
+            text_color="#F8FAFC"
         )
         lbl_top_title.pack(anchor="w", padx=14, pady=(10, 2))
 
@@ -977,7 +1099,7 @@ class AutoDriveApp(ctk.CTk):
             header_bar,
             text="Ikuti langkah-langkah mudah di bawah ini untuk memulai otomatisasi bukti kerja ke Google Drive.",
             font=ctk.CTkFont(size=11),
-            text_color="#cfd8dc"
+            text_color="#94A3B8"
         )
         lbl_top_sub.pack(anchor="w", padx=14, pady=(0, 10))
 
@@ -989,14 +1111,21 @@ class AutoDriveApp(ctk.CTk):
         short_labels = ["1. Akun", "2. Folder", "3. Upload", "4. Cap/Nama", "5. Mini Mode", "6. Update"]
 
         # 3. Card Konten Langkah
-        card_content = ctk.CTkFrame(dialog, corner_radius=10)
+        card_content = ctk.CTkFrame(
+            dialog,
+            corner_radius=10,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         card_content.pack(fill="both", expand=True, padx=16, pady=(0, 10))
 
         lbl_step_badge = ctk.CTkLabel(
             card_content,
             text="",
             font=ctk.CTkFont(size=11, weight="bold"),
-            fg_color="#1f538d",
+            fg_color="#1D4ED8",
+            text_color="#E0F2FE",
             corner_radius=6,
             padx=10,
             pady=3
@@ -1007,6 +1136,7 @@ class AutoDriveApp(ctk.CTk):
             card_content,
             text="",
             font=ctk.CTkFont(size=15, weight="bold"),
+            text_color="#F8FAFC",
             anchor="w"
         )
         lbl_step_title.pack(fill="x", padx=16, pady=(2, 2))
@@ -1015,7 +1145,7 @@ class AutoDriveApp(ctk.CTk):
             card_content,
             text="",
             font=ctk.CTkFont(size=12, slant="italic"),
-            text_color="#90a4ae",
+            text_color="#94A3B8",
             anchor="w"
         )
         lbl_step_tagline.pack(fill="x", padx=16, pady=(0, 10))
@@ -1024,19 +1154,28 @@ class AutoDriveApp(ctk.CTk):
             card_content,
             height=140,
             font=ctk.CTkFont(size=11),
+            fg_color="#060B14",
+            border_width=1,
+            border_color="#1E293B",
             corner_radius=6
         )
         txt_step_bullets.pack(fill="both", expand=True, padx=16, pady=(0, 8))
 
         # Box Tips
-        frame_tip = ctk.CTkFrame(card_content, corner_radius=8, fg_color=("#1e293b", "#0f172a"))
+        frame_tip = ctk.CTkFrame(
+            card_content,
+            corner_radius=8,
+            fg_color="#082F49",
+            border_width=1,
+            border_color="#0284C7"
+        )
         frame_tip.pack(fill="x", padx=16, pady=(0, 12))
 
         lbl_tip = ctk.CTkLabel(
             frame_tip,
             text="",
             font=ctk.CTkFont(size=11),
-            text_color="#81c784",
+            text_color="#6EE7B7",
             wraplength=560,
             justify="left"
         )
@@ -1047,7 +1186,9 @@ class AutoDriveApp(ctk.CTk):
             card_content,
             text="",
             height=32,
-            font=ctk.CTkFont(size=11, weight="bold")
+            font=ctk.CTkFont(size=11, weight="bold"),
+            fg_color="#1D4ED8",
+            hover_color="#2563EB"
         )
         btn_action.pack(anchor="w", padx=16, pady=(0, 14))
 
@@ -1060,8 +1201,10 @@ class AutoDriveApp(ctk.CTk):
             text="⬅️ Sebelumnya",
             width=110,
             height=34,
-            fg_color="#37474F",
-            hover_color="#455A64",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             font=ctk.CTkFont(size=11)
         )
         btn_prev.pack(side="left")
@@ -1070,7 +1213,7 @@ class AutoDriveApp(ctk.CTk):
             nav_bar,
             text="",
             font=ctk.CTkFont(size=11, weight="bold"),
-            text_color="#90a4ae"
+            text_color="#94A3B8"
         )
         lbl_counter.pack(side="left", expand=True)
 
@@ -1079,8 +1222,8 @@ class AutoDriveApp(ctk.CTk):
             text="Selanjutnya ➡️",
             width=130,
             height=34,
-            fg_color="#1f538d",
-            hover_color="#2b73be",
+            fg_color="#1D4ED8",
+            hover_color="#2563EB",
             font=ctk.CTkFont(size=11, weight="bold")
         )
         btn_next.pack(side="right")
@@ -1107,9 +1250,9 @@ class AutoDriveApp(ctk.CTk):
             # Update Pills
             for i, btn in enumerate(step_buttons):
                 if i == idx:
-                    btn.configure(fg_color="#1f538d", text_color="#ffffff")
+                    btn.configure(fg_color="#1D4ED8", text_color="#FFFFFF")
                 else:
-                    btn.configure(fg_color="#263238", text_color="#90a4ae")
+                    btn.configure(fg_color="#1E293B", text_color="#94A3B8")
 
             # Update Counter & Nav Buttons
             lbl_counter.configure(text=f"Langkah {idx + 1} dari {len(steps_data)}")
@@ -1121,15 +1264,15 @@ class AutoDriveApp(ctk.CTk):
             if idx == len(steps_data) - 1:
                 btn_next.configure(
                     text="✅ Selesai & Tutup",
-                    fg_color="#2e7d32",
-                    hover_color="#388e3c",
+                    fg_color="#059669",
+                    hover_color="#10B981",
                     command=dialog.destroy
                 )
             else:
                 btn_next.configure(
                     text="Selanjutnya ➡️",
-                    fg_color="#1f538d",
-                    hover_color="#2b73be",
+                    fg_color="#1D4ED8",
+                    hover_color="#2563EB",
                     command=_next_step
                 )
 
@@ -1241,6 +1384,7 @@ class AutoDriveApp(ctk.CTk):
         dialog.resizable(False, False)
         dialog.attributes("-topmost", True)
         dialog.grab_set()
+        dialog.configure(fg_color="#0A111E")
 
         try:
             x = self.winfo_x() + (self.winfo_width() // 2) - 250
@@ -1250,14 +1394,20 @@ class AutoDriveApp(ctk.CTk):
             pass
 
         # Header Card
-        card_header = ctk.CTkFrame(dialog, corner_radius=10, fg_color=("#1f538d", "#14375e"))
+        card_header = ctk.CTkFrame(
+            dialog,
+            corner_radius=10,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         card_header.pack(fill="x", padx=16, pady=(16, 10))
 
         lbl_title = ctk.CTkLabel(
             card_header,
             text="✨ Versi Baru Siap Diperbarui!",
             font=ctk.CTkFont(size=15, weight="bold"),
-            text_color="#ffffff"
+            text_color="#F8FAFC"
         )
         lbl_title.pack(anchor="w", padx=14, pady=(12, 4))
 
@@ -1270,18 +1420,25 @@ class AutoDriveApp(ctk.CTk):
             card_header,
             text=f"Versi Terpasang: v{cur_v}  ➔  Versi Terbaru: v{new_v}{dt_text}",
             font=ctk.CTkFont(size=12),
-            text_color="#e0e0e0"
+            text_color="#94A3B8"
         )
         lbl_vers.pack(anchor="w", padx=14, pady=(0, 12))
 
         # Changelog Card
-        card_body = ctk.CTkFrame(dialog, corner_radius=10)
+        card_body = ctk.CTkFrame(
+            dialog,
+            corner_radius=10,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         card_body.pack(fill="both", expand=True, padx=16, pady=6)
 
         lbl_notes = ctk.CTkLabel(
             card_body,
             text="Catatan Perubahan & Fitur Baru (Changelog):",
-            font=ctk.CTkFont(size=12, weight="bold")
+            font=ctk.CTkFont(size=12, weight="bold"),
+            text_color="#F8FAFC"
         )
         lbl_notes.pack(anchor="w", padx=12, pady=(10, 4))
 
@@ -1289,6 +1446,9 @@ class AutoDriveApp(ctk.CTk):
             card_body,
             height=130,
             font=ctk.CTkFont(size=11),
+            fg_color="#060B14",
+            border_width=1,
+            border_color="#1E293B",
             corner_radius=6
         )
         txt_changelog.pack(fill="both", expand=True, padx=12, pady=(0, 10))
@@ -1316,8 +1476,10 @@ class AutoDriveApp(ctk.CTk):
             text="⚙️ Atur URL",
             width=90,
             height=34,
-            fg_color="#37474F",
-            hover_color="#455A64",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             font=ctk.CTkFont(size=11),
             command=self.show_update_settings_dialog
         )
@@ -1328,8 +1490,10 @@ class AutoDriveApp(ctk.CTk):
             text="Nanti Saja",
             width=95,
             height=34,
-            fg_color="#424242",
-            hover_color="#616161",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             font=ctk.CTkFont(size=11),
             command=dialog.destroy
         )
@@ -1380,8 +1544,8 @@ class AutoDriveApp(ctk.CTk):
             text="⬇️ Perbarui Sekarang",
             width=150,
             height=34,
-            fg_color="#2e7d32",
-            hover_color="#388e3c",
+            fg_color="#059669",
+            hover_color="#10B981",
             font=ctk.CTkFont(size=12, weight="bold"),
             command=_start_download
         )
@@ -1395,6 +1559,7 @@ class AutoDriveApp(ctk.CTk):
         dialog.resizable(False, False)
         dialog.attributes("-topmost", True)
         dialog.grab_set()
+        dialog.configure(fg_color="#0A111E")
 
         try:
             x = self.winfo_x() + (self.winfo_width() // 2) - 210
@@ -1403,14 +1568,20 @@ class AutoDriveApp(ctk.CTk):
         except Exception:
             pass
 
-        card = ctk.CTkFrame(dialog, corner_radius=10)
+        card = ctk.CTkFrame(
+            dialog,
+            corner_radius=10,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         card.pack(fill="both", expand=True, padx=16, pady=16)
 
         lbl_icon = ctk.CTkLabel(
             card,
             text="✅ Versi Terbaru",
             font=ctk.CTkFont(size=16, weight="bold"),
-            text_color="#81c784"
+            text_color="#6EE7B7"
         )
         lbl_icon.pack(pady=(16, 6))
 
@@ -1418,6 +1589,7 @@ class AutoDriveApp(ctk.CTk):
             card,
             text=f"Anda sudah menggunakan AutoDrive Ekin PPUK versi terbaru (v{cur_v}).\nTidak ada pembaruan baru yang ditemukan.",
             font=ctk.CTkFont(size=11),
+            text_color="#94A3B8",
             justify="center"
         )
         lbl_desc.pack(padx=16, pady=(0, 16))
@@ -1430,8 +1602,10 @@ class AutoDriveApp(ctk.CTk):
             text="⚙️ Atur URL Update",
             width=130,
             height=30,
-            fg_color="#37474F",
-            hover_color="#455A64",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             font=ctk.CTkFont(size=11),
             command=self.show_update_settings_dialog
         )
@@ -1442,7 +1616,9 @@ class AutoDriveApp(ctk.CTk):
             text="Tutup",
             width=90,
             height=30,
-            font=ctk.CTkFont(size=11),
+            fg_color="#1D4ED8",
+            hover_color="#2563EB",
+            font=ctk.CTkFont(size=11, weight="bold"),
             command=dialog.destroy
         )
         btn_ok.pack(side="right")
@@ -1455,6 +1631,7 @@ class AutoDriveApp(ctk.CTk):
         dialog.resizable(False, False)
         dialog.attributes("-topmost", True)
         dialog.grab_set()
+        dialog.configure(fg_color="#0A111E")
 
         try:
             x = self.winfo_x() + (self.winfo_width() // 2) - 230
@@ -1463,14 +1640,20 @@ class AutoDriveApp(ctk.CTk):
         except Exception:
             pass
 
-        card = ctk.CTkFrame(dialog, corner_radius=10)
+        card = ctk.CTkFrame(
+            dialog,
+            corner_radius=10,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         card.pack(fill="both", expand=True, padx=16, pady=16)
 
         lbl_icon = ctk.CTkLabel(
             card,
             text="ℹ️ Info Pembaruan",
             font=ctk.CTkFont(size=14, weight="bold"),
-            text_color="#ffb74d"
+            text_color="#FBBF24"
         )
         lbl_icon.pack(pady=(14, 6))
 
@@ -1478,6 +1661,7 @@ class AutoDriveApp(ctk.CTk):
             card,
             text=f"Aplikasi belum dapat menjangkau tautan pembaruan atau link belum diatur.\n\nLink saat ini:\n{url}",
             font=ctk.CTkFont(size=11),
+            text_color="#94A3B8",
             wraplength=400,
             justify="center"
         )
@@ -1492,6 +1676,8 @@ class AutoDriveApp(ctk.CTk):
             width=170,
             height=32,
             font=ctk.CTkFont(size=11, weight="bold"),
+            fg_color="#1D4ED8",
+            hover_color="#2563EB",
             command=self.show_update_settings_dialog
         )
         btn_settings.pack(side="left")
@@ -1501,8 +1687,10 @@ class AutoDriveApp(ctk.CTk):
             text="Tutup",
             width=90,
             height=32,
-            fg_color="#424242",
-            hover_color="#616161",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             font=ctk.CTkFont(size=11),
             command=dialog.destroy
         )
@@ -1516,6 +1704,7 @@ class AutoDriveApp(ctk.CTk):
         dialog.resizable(False, False)
         dialog.attributes("-topmost", True)
         dialog.grab_set()
+        dialog.configure(fg_color="#0A111E")
 
         try:
             x = self.winfo_x() + (self.winfo_width() // 2) - 260
@@ -1524,13 +1713,20 @@ class AutoDriveApp(ctk.CTk):
         except Exception:
             pass
 
-        card = ctk.CTkFrame(dialog, corner_radius=10)
+        card = ctk.CTkFrame(
+            dialog,
+            corner_radius=10,
+            fg_color="#0F172A",
+            border_width=1,
+            border_color="#1E3A8A"
+        )
         card.pack(fill="both", expand=True, padx=16, pady=16)
 
         lbl_title = ctk.CTkLabel(
             card,
             text="Pengaturan Link version.json",
-            font=ctk.CTkFont(size=14, weight="bold")
+            font=ctk.CTkFont(size=14, weight="bold"),
+            text_color="#F8FAFC"
         )
         lbl_title.pack(anchor="w", padx=14, pady=(12, 4))
 
@@ -1538,6 +1734,7 @@ class AutoDriveApp(ctk.CTk):
             card,
             text="Masukkan tautan URL (atau lokasi berkas version.json).\nAplikasi rekan kerja akan memeriksa link ini setiap kali mengklik 'Cek Update'.",
             font=ctk.CTkFont(size=11),
+            text_color="#94A3B8",
             justify="left",
             wraplength=460
         )
@@ -1548,7 +1745,8 @@ class AutoDriveApp(ctk.CTk):
             card,
             placeholder_text="https://raw.githubusercontent.com/.../version.json",
             height=34,
-            font=ctk.CTkFont(size=11)
+            font=ctk.CTkFont(size=11),
+            border_color="#1E40AF"
         )
         entry_url.insert(0, current_url)
         entry_url.pack(fill="x", padx=14, pady=(0, 10))
@@ -1556,7 +1754,9 @@ class AutoDriveApp(ctk.CTk):
         chk_auto = ctk.CTkCheckBox(
             card,
             text="Otomatis periksa pembaruan saat aplikasi dibuka",
-            font=ctk.CTkFont(size=11)
+            font=ctk.CTkFont(size=11),
+            fg_color="#0284C7",
+            hover_color="#0369A1"
         )
         if self.config_mgr.get_auto_check_update():
             chk_auto.select()
@@ -1580,6 +1780,8 @@ class AutoDriveApp(ctk.CTk):
             text="💾 Simpan & Tes Cek Sekarang",
             height=32,
             font=ctk.CTkFont(size=11, weight="bold"),
+            fg_color="#1D4ED8",
+            hover_color="#2563EB",
             command=_save_settings
         )
         btn_save.pack(side="right")
@@ -1589,8 +1791,10 @@ class AutoDriveApp(ctk.CTk):
             text="Batal",
             width=80,
             height=32,
-            fg_color="#424242",
-            hover_color="#616161",
+            fg_color="#1E293B",
+            hover_color="#334155",
+            border_width=1,
+            border_color="#334155",
             font=ctk.CTkFont(size=11),
             command=dialog.destroy
         )
